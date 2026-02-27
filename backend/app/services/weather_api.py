@@ -142,9 +142,7 @@ class SingaporeWeatherClient:
         payload = self.fetch_4day_forecast_payload()
         return self.snapshot_4day_forecast_payload(payload, latitude, longitude)
 
-    def snapshot_from_payload(
-        self, payload: dict, latitude: float, longitude: float
-    ) -> dict:
+    def snapshot_from_payload(self, payload: dict, latitude: float, longitude: float) -> dict:
         if isinstance(payload, dict) and payload.get("code") not in (None, 0):
             message = payload.get("errorMsg") or "Weather provider returned an error"
             raise WeatherProviderError(message)
