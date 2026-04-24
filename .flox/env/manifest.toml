@@ -1,23 +1,23 @@
-version = 1
+schema-version = "1.11.0"
 
 [install]
 nodejs.pkg-path = "nodejs"
+nodejs.outputs = "all"
 uv.pkg-path = "uv"
 
 [vars]
 BACKEND_PORT = "8000"
 FRONTEND_PORT = "5173"
 
-[services]
-backend.command = '''
-cd "$FLOX_ENV_PROJECT/backend"
-[ -f .env ] || cp .env.example .env
-uv sync
-exec uv run uvicorn app.main:app --reload --port "$BACKEND_PORT"
+[services.backend]
+command = '''
+cd backend
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 '''
-frontend.command = '''
-cd "$FLOX_ENV_PROJECT/frontend"
-[ -d node_modules ] || npm install
-export VITE_BACKEND_PORT="$BACKEND_PORT"
-exec npm run dev -- --host 127.0.0.1 --port "$FRONTEND_PORT"
+
+[services.frontend]
+command = '''
+cd frontend
+npm install
+npm run dev -- --host 0.0.0.0 --port 5173
 '''
